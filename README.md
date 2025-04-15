@@ -1,3 +1,5 @@
+![Telegram Bot Template](https://media.animerealms.org/image/AgACAgUAAx0EboWBewACZHFn_hGcWmshdPqMSzffkdFe9R9x2QACxcAxG1bT8VcemRX3TK9DmgEAAwIAA3kAAzYE)
+
 # Telegram-Bot
 
 A modular Telegram Bot boilerplate with database integration. This project provides a structured foundation for building Telegram bots with a clean architecture that's easy to extend.
