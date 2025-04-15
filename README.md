@@ -97,6 +97,8 @@ The database module provides:
   - First and last name storage
   - Join date and last seen tracking
 
+For more detailed information about the database structure and operations, see the [Database Documentation](Bot/db/README.md).
+
 ## Modules
 
 The bot has a modular design that makes it easy to add new commands and features:
@@ -111,6 +113,8 @@ The bot has a modular design that makes it easy to add new commands and features
 - `/help` - Show available commands
 - `/info` - Show information about yourself
 - `/stats` - Show bot statistics
+
+For more information about creating and customizing modules, see the [Modules Documentation](Bot/modules/README.md).
 
 ## Core Functionality
 
