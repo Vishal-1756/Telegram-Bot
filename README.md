@@ -8,6 +8,7 @@ A modular Telegram Bot boilerplate with database integration. This project provi
 
 - Modular structure for easy addition of commands and features
 - SQLAlchemy database integration with comprehensive user tracking
+- Asynchronous MongoDB integration with Motor AsyncIO for NoSQL database operations
 - Asynchronous programming with uvloop for improved performance (automatically installed on non-Windows platforms)
 - Comprehensive logging system
 - User tracking functionality with join date and last seen tracking
@@ -23,6 +24,7 @@ A modular Telegram Bot boilerplate with database integration. This project provi
   - Pyrogram (Telegram client library)
   - SQLAlchemy (ORM for database operations)
   - psycopg2-binary (PostgreSQL adapter)
+  - motor (Asynchronous MongoDB driver)
   - tgcrypto (Fast cryptography library for Telegram)
   - python-dotenv (Environment variable management)
   - uvloop (Automatically installed on non-Windows platforms for improved performance)
@@ -49,7 +51,8 @@ A modular Telegram Bot boilerplate with database integration. This project provi
      - `BOT_TOKEN`: Your bot token from @BotFather
      - `API_ID`: Your Telegram API ID
      - `API_HASH`: Your Telegram API Hash
-     - `DB_URI`: Database connection URI (default: SQLite)
+     - `DB_URI`: Database connection URI for SQLAlchemy (default: SQLite)
+     - `MONGO_URI`: MongoDB connection URI (optional)
 
 4. Run the bot
    ```
@@ -64,9 +67,12 @@ Telegram-Bot/
 │   ├── core/               # Core functionality
 │   │   ├── decorators/     # Decorator functions
 │   │   └── utils/          # Utility functions
-│   ├── db/                 # Database models and operations
+│   ├── db/                 # SQLAlchemy database models and operations
 │   │   ├── __init__.py     # Database connection setup
 │   │   └── users.py        # User model and operations
+│   ├── mongo/              # MongoDB models and operations
+│   │   ├── __init__.py     # MongoDB connection setup
+│   │   └── users.py        # User operations for MongoDB
 │   ├── modules/            # Bot command modules
 │   │   ├── __init__.py     # Module loader
 │   │   └── start.py        # Start and help commands
@@ -86,20 +92,34 @@ Available environment variables:
 - `BOT_TOKEN`: Telegram bot token from BotFather
 - `API_ID`: Telegram API ID
 - `API_HASH`: Telegram API Hash
-- `DB_URI`: Database connection string
+- `DB_URI`: Database connection string for SQLAlchemy
+- `MONGO_URI`: MongoDB connection string (optional)
 
 ## Database
 
-The bot uses SQLAlchemy ORM for database operations. By default, it's configured to use SQLite, but you can change the `DB_URI` in `config.py` to use other database engines like PostgreSQL or MySQL.
+### SQLAlchemy
 
-The database module provides:
+The bot uses SQLAlchemy ORM for SQL database operations. By default, it's configured to use SQLite, but you can change the `DB_URI` in `config.py` to use other database engines like PostgreSQL or MySQL.
+
+The SQLAlchemy database module provides:
 - A base model system in `db/__init__.py`
 - User tracking functionality in `db/users.py` with:
   - User ID and username tracking
   - First and last name storage
   - Join date and last seen tracking
 
-For more detailed information about the database structure and operations, see the [Database Documentation](Bot/db/README.md).
+For more detailed information about the SQLAlchemy database structure and operations, see the [Database Documentation](Bot/db/README.md).
+
+### MongoDB (Async)
+
+The bot also supports MongoDB for NoSQL database operations using Motor AsyncIO for asynchronous operations. MongoDB integration is optional and will be enabled only if `MONGO_URI` is provided in the configuration.
+
+The MongoDB module provides:
+- Asynchronous MongoDB connection setup in `mongo/__init__.py`
+- Asynchronous user tracking functionality in `mongo/users.py` with similar features to the SQLAlchemy version
+- All database operations are non-blocking, using `async/await` syntax
+
+For more detailed information about the MongoDB structure and operations, see the [MongoDB Documentation](Bot/mongo/README.md).
 
 ## Modules
 
