@@ -18,7 +18,7 @@ async def start(_, message: Message):
     welcome_text = (
         f"👋 Hello {user.first_name}!\n\n"
         f"I'm a Telegram bot template with a modular structure and database integration.\n\n"
-        f"Use /help to see available commands."
+        f"<blockquote>Use /help to see available commands.</blockquote>"
     )
     
     # Create inline keyboard with help button
