@@ -5,3 +5,4 @@ motor==3.3.2
 tgcrypto
 python-dotenv
 watchdog
+typer

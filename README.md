@@ -6,20 +6,24 @@ A modular Telegram Bot boilerplate with database integration. This project provi
 
 ## Features
 
-- Modular structure for easy addition of commands and features
-- SQLAlchemy database integration with comprehensive user tracking
-- Asynchronous MongoDB integration with Motor AsyncIO for NoSQL database operations
-- Asynchronous programming with uvloop for improved performance (automatically installed on non-Windows platforms)
-- Comprehensive logging system
-- User tracking functionality with join date and last seen tracking
-- Environment-based configuration with dotenv
-- Utility functions for common operations
-- Rate limiting and error handling
-- Inline keyboard support
+- **Modular Architecture**: Easily add new commands and features.
+- **Dual Database Support**:
+  - **SQLAlchemy**: For relational database operations (PostgreSQL, SQLite, etc.).
+  - **Motor (Asyncio)**: For non-blocking MongoDB operations.
+- **Developer Experience**:
+  - **CLI Tool**: A `manage.py` script for running the bot, with hot-reloading for development.
+  - **Docker Support**: Includes a `Dockerfile` and `docker-compose.yml` for easy containerization.
+- **Core Functionality**:
+  - **User Tracking**: Tracks user join dates and last seen times.
+  - **Rate Limiting & Error Handling**: Decorators to protect and manage your bot's functions.
+  - **Utility Functions**: Helpers for common tasks like parsing and formatting.
+- **Asynchronous**: Built with `asyncio` and uses `uvloop` on non-Windows systems for high performance.
+- **Configuration**: Uses a `.env` file for easy and secure configuration management.
 
 ## Requirements
 
 - Python 3.7+
+- Docker (optional, for containerized deployment)
 - Dependencies listed in `requirements.txt`:
   - Pyrogram (Telegram client library)
   - SQLAlchemy (ORM for database operations)
@@ -27,37 +31,71 @@ A modular Telegram Bot boilerplate with database integration. This project provi
   - motor (Asynchronous MongoDB driver)
   - tgcrypto (Fast cryptography library for Telegram)
   - python-dotenv (Environment variable management)
+  - **watchdog** (For file system monitoring and hot-reloading)
+  - **typer** (For creating the command-line interface)
   - uvloop (Automatically installed on non-Windows platforms for improved performance)
 
 ## Setup
 
-1. Clone the repository
-   ```
-   git clone https://github.com/yourusername/Telegram-Bot.git
-   cd Telegram-Bot
-   ```
+1.  **Clone the repository**
 
-2. Install dependencies
-   ```
-   pip install -r requirements.txt
-   ```
+    ```bash
+    git clone https://github.com/yourusername/Telegram-Bot.git
+    cd Telegram-Bot
+    ```
 
-3. Configure the bot
-   - Copy the sample environment file and edit it with your credentials:
-     ```
-     cp .env.sample .env
-     ```
-   - Open `.env` and configure:
-     - `BOT_TOKEN`: Your bot token from @BotFather
-     - `API_ID`: Your Telegram API ID
-     - `API_HASH`: Your Telegram API Hash
-     - `DB_URI`: Database connection URI for SQLAlchemy (default: SQLite)
-     - `MONGO_URI`: MongoDB connection URI (optional)
+2.  **Install dependencies**
 
-4. Run the bot
-   ```
-   python -m Bot
-   ```
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Configure the bot**
+    - Copy the sample environment file and edit it with your credentials:
+      ```bash
+      cp .env.sample .env
+      ```
+    - Open `.env` and fill in your details (`BOT_TOKEN`, `API_ID`, `API_HASH`, etc.).
+
+## Usage
+
+The bot is managed through a command-line interface in `manage.py`.
+
+### Running the Bot
+
+- **Run normally:**
+
+  ```bash
+  python manage.py
+  ```
+
+- **Run with hot-reloading for development:**
+  This will automatically restart the bot whenever you save a change in the `Bot/` directory.
+  ```bash
+  python manage.py --reload
+  ```
+
+## Docker
+
+This project is fully configured to run with Docker for consistent and isolated deployments.
+
+1.  **Build and run the container:**
+    Make sure your `.env` file is configured. Then, run:
+
+    ```bash
+    docker-compose up --build
+    ```
+
+2.  **Run in the background (detached mode):**
+
+    ```bash
+    docker-compose up --build -d
+    ```
+
+3.  **To stop the container:**
+    ```bash
+    docker-compose down
+    ```
 
 ## Project Structure
 
@@ -65,21 +103,16 @@ A modular Telegram Bot boilerplate with database integration. This project provi
 Telegram-Bot/
 ├── Bot/                    # Main bot package
 │   ├── core/               # Core functionality
-│   │   ├── decorators/     # Decorator functions
-│   │   └── utils/          # Utility functions
-│   ├── db/                 # SQLAlchemy database models and operations
-│   │   ├── __init__.py     # Database connection setup
-│   │   └── users.py        # User model and operations
-│   ├── mongo/              # MongoDB models and operations
-│   │   ├── __init__.py     # MongoDB connection setup
-│   │   └── users.py        # User operations for MongoDB
+│   ├── db/                 # SQLAlchemy database models
+│   ├── mongo/              # MongoDB models
 │   ├── modules/            # Bot command modules
-│   │   ├── __init__.py     # Module loader
-│   │   └── start.py        # Start and help commands
 │   ├── config.py           # Configuration settings
 │   ├── __init__.py         # Bot initialization
 │   └── __main__.py         # Entry point
 ├── .env.sample             # Sample environment variables
+├── docker-compose.yml      # Docker Compose configuration
+├── Dockerfile              # Docker image definition
+├── manage.py               # Command-line interface for management
 ├── requirements.txt        # Dependencies
 └── README.md               # Documentation
 ```
@@ -89,6 +122,7 @@ Telegram-Bot/
 The bot uses environment variables for configuration, which can be set in the `.env` file. This allows for easier deployment across different environments while keeping sensitive information secure.
 
 Available environment variables:
+
 - `BOT_TOKEN`: Telegram bot token from BotFather
 - `API_ID`: Telegram API ID
 - `API_HASH`: Telegram API Hash
@@ -102,6 +136,7 @@ Available environment variables:
 The bot uses SQLAlchemy ORM for SQL database operations. By default, it's configured to use SQLite, but you can change the `DB_URI` in `config.py` to use other database engines like PostgreSQL or MySQL.
 
 The SQLAlchemy database module provides:
+
 - A base model system in `db/__init__.py`
 - User tracking functionality in `db/users.py` with:
   - User ID and username tracking
@@ -115,6 +150,7 @@ For more detailed information about the SQLAlchemy database structure and operat
 The bot also supports MongoDB for NoSQL database operations using Motor AsyncIO for asynchronous operations. MongoDB integration is optional and will be enabled only if `MONGO_URI` is provided in the configuration.
 
 The MongoDB module provides:
+
 - Asynchronous MongoDB connection setup in `mongo/__init__.py`
 - Asynchronous user tracking functionality in `mongo/users.py` with similar features to the SQLAlchemy version
 - All database operations are non-blocking, using `async/await` syntax
