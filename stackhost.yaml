@@ -10,4 +10,4 @@ commands:
     - "pip install -r requirements.txt"
   
   start:
-    - "python manage.py"
+    - "python manage.py" # DO NOT USE --reload
